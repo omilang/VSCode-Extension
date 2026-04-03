@@ -1,0 +1,46 @@
+{
+  "name": "omilang",
+  "displayName": "Omi",
+  "description": "Syntax highlighting and file icons for the Omi programming language (.omi)",
+  "version": "1.0.0",
+  "publisher": "Qualsu",
+  "icon": "icons/icon.png",
+  "scripts": {
+    "build:vsix": "npx @vscode/vsce package --allow-missing-repository --skip-license"
+  },
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "omi",
+        "aliases": ["Omi", "OmiLang", "omilang"],
+        "extensions": [".omi"],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/icon.png",
+          "dark": "./icons/icon.png"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "omi",
+        "scopeName": "source.omi",
+        "path": "./syntaxes/omi.tmLanguage.json"
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "omi-icons",
+        "label": "Omi Icons",
+        "path": "./icons/omi-icon-theme.json"
+      }
+    ]
+  }
+}

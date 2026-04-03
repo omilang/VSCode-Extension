@@ -1,0 +1,10 @@
+{
+  "iconDefinitions": {
+    "omi-file": {
+      "iconPath": "./icon.png"
+    }
+  },
+  "fileExtensions": {
+    "omi": "omi-file",
+  }
+}
