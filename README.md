@@ -2,7 +2,7 @@
 
 # Omi VS Code Extension
 
-Syntax highlighting and file styling for [Omi Language](https://github.com/OmiLang/Omi)
+Syntax highlighting, file styling, autocomplete, and signature hints for [Omi Language](https://github.com/OmiLang/Omi).
 
 ## Build from source
 
