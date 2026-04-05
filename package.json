@@ -7,7 +7,7 @@
   "icon": "icons/icon.png",
   "main": "./extension.js",
   "scripts": {
-    "build:vsix": "npx @vscode/vsce package --allow-missing-repository --skip-license"
+    "build:vsix": "npx @vscode/vsce package --allow-missing-repository"
   },
   "engines": {
     "vscode": "^1.60.0"

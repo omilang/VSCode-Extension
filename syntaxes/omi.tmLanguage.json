@@ -76,8 +76,22 @@
     "type-annotation": {
       "patterns": [
         {
+          "comment": "Typed array annotations: [int], [int | bool]",
+          "match": "\\[([a-zA-Z_][a-zA-Z0-9_]*(?:\\s*\\|\\s*[a-zA-Z_][a-zA-Z0-9_]*)*)\\]",
+          "captures": {
+            "1": { "name": "entity.name.type.omi" }
+          }
+        },
+        {
           "comment": "Type annotations: <int>, <string | bool>, <every>, etc.",
           "match": "<([a-zA-Z_][a-zA-Z0-9_]*(?:\\s*\\|\\s*(?:[a-zA-Z_][a-zA-Z0-9_]*|\"[^\"]*\"))*)>",
+          "captures": {
+            "1": { "name": "entity.name.type.omi" }
+          }
+        },
+        {
+          "comment": "Typed array annotations: [int], [int | bool]",
+          "match": "\\[([a-zA-Z_][a-zA-Z0-9_]*(?:\\s*\\|\\s*[a-zA-Z_][a-zA-Z0-9_]*)*)\\]",
           "captures": {
             "1": { "name": "entity.name.type.omi" }
           }
@@ -134,7 +148,7 @@
         {
           "comment": "Built-in type names used outside angle brackets (e.g. in type aliases, annotations)",
           "name": "storage.type.omi",
-          "match": "\\b(int|float|number|string|bool|list|dict|func|call|void|null|every)\\b"
+          "match": "\\b(int|float|number|string|bool|array|dict|func|call|void|null|every)\\b"
         }
       ]
     },
