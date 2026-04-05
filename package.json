@@ -1,16 +1,20 @@
 {
   "name": "omilang",
   "displayName": "Omi",
-  "description": "Syntax highlighting and file icons for the Omi programming language (.omi)",
-  "version": "1.0.0",
+  "description": "Syntax highlighting, file icons, autocomplete, and signature hints for the Omi programming language (.omi)",
+  "version": "1.1.0",
   "publisher": "Qualsu",
   "icon": "icons/icon.png",
+  "main": "./extension.js",
   "scripts": {
-    "build:vsix": "npx @vscode/vsce package --allow-missing-repository --skip-license"
+    "build:vsix": "npx @vscode/vsce package --allow-missing-repository"
   },
   "engines": {
     "vscode": "^1.60.0"
   },
+  "activationEvents": [
+    "onLanguage:omi"
+  ],
   "categories": [
     "Programming Languages",
     "Linters"
