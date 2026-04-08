@@ -2,18 +2,7 @@
 
 # Omi VS Code Extension
 
-Syntax highlighting, file styling, autocomplete, and signature hints for [Omi Language](https://github.com/OmiLang/Omi).
-
-## Built-in I/O support
-
-The extension now suggests the updated output helpers:
-
-```omi
-print("hello")
-println("world")
-output(1, 2, "hello", 3)
-reprint(42)
-```
+Syntax highlighting, file styling, code tips, and signature hints for [Omi Language](https://github.com/OmiLang/Omi).
 
 ## Build from source
 
