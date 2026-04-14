@@ -2,7 +2,7 @@
   "name": "omilang",
   "displayName": "Omi",
   "description": "Syntax highlighting, file icons, autocomplete, and signature hints for the Omi programming language (.omi)",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "publisher": "Qualsu",
   "icon": "icons/icon.png",
   "main": "./extension.js",

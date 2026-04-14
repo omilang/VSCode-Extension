@@ -1,13 +1,16 @@
 const vscode = require('vscode');
 
 const MODULE_IMPORTS = [
-  { id: 'system', path: 'omi/system', alias: 'sys', description: 'OS interaction, environment variables, and process control.' },
-  { id: 'files', path: 'omi/files', alias: 'fs', description: 'File and directory operations.' },
-  { id: 'paths', path: 'omi/paths', alias: 'p', description: 'Path utility helpers.' },
-  { id: 'time', path: 'omi/time', alias: 't', description: 'Time formatting, parsing, and timestamps.' },
-  { id: 'math', path: 'omi/math', alias: 'm', description: 'Math functions and constants.' },
-  { id: 'json', path: 'omi/json', alias: 'json', description: 'JSON parsing and file helpers.' },
-  { id: 'http', path: 'omi/http', alias: 'http', description: 'HTTP requests and downloads.' },
+  { id: 'system', path: 'omi:system', alias: 'sys', description: 'OS interaction, environment variables, and process control.' },
+  { id: 'files', path: 'omi:files', alias: 'fs', description: 'File and directory operations.' },
+  { id: 'paths', path: 'omi:paths', alias: 'p', description: 'Path utility helpers.' },
+  { id: 'time', path: 'omi:time', alias: 't', description: 'Time formatting, parsing, and timestamps.' },
+  { id: 'math', path: 'omi:math', alias: 'm', description: 'Math functions and constants.' },
+  { id: 'json', path: 'omi:json', alias: 'json', description: 'JSON parsing and file helpers.' },
+  { id: 'http', path: 'omi:http', alias: 'http', description: 'HTTP requests and downloads.' },
+  { id: 'txt', path: 'omi:txt', alias: 'txt', description: 'Text file read/write operations.' },
+  { id: 'string', path: 'omi:string', alias: 'str', description: 'String manipulation utilities.' },
+  { id: 'regex', path: 'omi:regex', alias: 'rx', description: 'Regular expression matching and replacement.' },
 ];
 
 const USE_FLAGS = ['notypes', 'eval', 'debug', 'noecho', 'module'];
@@ -60,6 +63,14 @@ const GLOBAL_ITEMS = [
     documentation: 'Returns the length of a list, string, or dict-like value.',
     signature: 'len(value<every>)',
     parameters: ['value<every>'],
+  },
+  {
+    label: 'range',
+    insertText: 'range(${1:stop})',
+    detail: 'Built-in function',
+    documentation: 'Returns an array of integers. range(stop), range(start, stop), or range(start, stop, step).',
+    signature: 'range(stop<int>) / range(start<int>, stop<int>) / range(start<int>, stop<int>, step<int>)',
+    parameters: ['start<int>', 'stop<int>', '[step<int>]'],
   },
   {
     label: 'append',
@@ -252,10 +263,49 @@ const MODULE_MEMBERS = {
     { label: 'download', insertText: 'download(${1:url}, ${2:path})', signature: 'download(url<string>, path<string>)', documentation: 'Downloads a file to disk.' },
     { label: 'upload', insertText: 'upload(${1:url}, ${2:path})', signature: 'upload(url<string>, path<string>, [field_name<string>])', documentation: 'Uploads a file. `field_name` is optional and defaults to `"file"`.' },
   ],
+  txt: [
+    { label: 'read', insertText: 'read(${1:path})', signature: 'read(path<string>, [encoding<string>])', documentation: 'Reads a text file and returns its contents as a string.' },
+    { label: 'write', insertText: 'write(${1:path}, ${2:content})', signature: 'write(path<string>, content<string>, [encoding<string>])', documentation: 'Writes a string to a text file (overwrites).' },
+    { label: 'append', insertText: 'append(${1:path}, ${2:content})', signature: 'append(path<string>, content<string>, [encoding<string>])', documentation: 'Appends a string to a text file.' },
+    { label: 'lines', insertText: 'lines(${1:path})', signature: 'lines(path<string>, [encoding<string>])', documentation: 'Returns file lines as list<string> with newlines stripped.' },
+    { label: 'write_lines', insertText: 'write_lines(${1:path}, ${2:lines})', signature: 'write_lines(path<string>, lines<list>, [encoding<string>])', documentation: 'Writes each list element as a line.' },
+    { label: 'size', insertText: 'size(${1:path})', signature: 'size(path<string>)', documentation: 'Returns file size in bytes.' },
+    { label: 'exists', insertText: 'exists(${1:path})', signature: 'exists(path<string>)', documentation: 'Returns true if the file exists.' },
+    { label: 'backup', insertText: 'backup(${1:path})', signature: 'backup(path<string>)', documentation: 'Creates a timestamped .bak copy; returns the backup path.' },
+  ],
+  string: [
+    { label: 'len', insertText: 'len(${1:str})', signature: 'len(str<string>)', documentation: 'Returns the number of characters.' },
+    { label: 'slice', insertText: 'slice(${1:str}, ${2:start}, ${3:end})', signature: 'slice(str<string>, start<int>, end<int>)', documentation: 'Returns a substring from start (inclusive) to end (exclusive).' },
+    { label: 'split', insertText: 'split(${1:str}, ${2:delimiter})', signature: 'split(str<string>, delimiter<string>)', documentation: 'Splits the string by delimiter, returns list<string>.' },
+    { label: 'join', insertText: 'join(${1:list}, ${2:delimiter})', signature: 'join(list<list>, delimiter<string>)', documentation: 'Joins list elements with the delimiter.' },
+    { label: 'replace', insertText: 'replace(${1:str}, ${2:old}, ${3:new})', signature: 'replace(str<string>, old<string>, new<string>, [count<int>])', documentation: 'Replaces occurrences of old with new. count is optional (default: all).' },
+    { label: 'trim', insertText: 'trim(${1:str})', signature: 'trim(str<string>)', documentation: 'Strips leading and trailing whitespace.' },
+    { label: 'trim_left', insertText: 'trim_left(${1:str})', signature: 'trim_left(str<string>)', documentation: 'Strips leading whitespace.' },
+    { label: 'trim_right', insertText: 'trim_right(${1:str})', signature: 'trim_right(str<string>)', documentation: 'Strips trailing whitespace.' },
+    { label: 'upper', insertText: 'upper(${1:str})', signature: 'upper(str<string>)', documentation: 'Converts to uppercase.' },
+    { label: 'lower', insertText: 'lower(${1:str})', signature: 'lower(str<string>)', documentation: 'Converts to lowercase.' },
+    { label: 'contains', insertText: 'contains(${1:str}, ${2:substring})', signature: 'contains(str<string>, substring<string>)', documentation: 'Returns true if the substring is found.' },
+    { label: 'starts_with', insertText: 'starts_with(${1:str}, ${2:prefix})', signature: 'starts_with(str<string>, prefix<string>)', documentation: 'Returns true if str starts with prefix.' },
+    { label: 'ends_with', insertText: 'ends_with(${1:str}, ${2:suffix})', signature: 'ends_with(str<string>, suffix<string>)', documentation: 'Returns true if str ends with suffix.' },
+    { label: 'index_of', insertText: 'index_of(${1:str}, ${2:substring})', signature: 'index_of(str<string>, substring<string>)', documentation: 'Returns the index of the first match, or -1.' },
+    { label: 'format', insertText: 'format(${1:template}, ${2:values})', signature: 'format(template<string>, values<list|dict>)', documentation: 'Replaces {} positionally (list) or {key} by name (dict).' },
+    { label: 'repeat', insertText: 'repeat(${1:str}, ${2:count})', signature: 'repeat(str<string>, count<int>)', documentation: 'Repeats the string count times.' },
+    { label: 'pad_left', insertText: 'pad_left(${1:str}, ${2:length})', signature: 'pad_left(str<string>, length<int>, [char<string>])', documentation: 'Right-justifies string in a field of given length. char is optional (default: space).' },
+    { label: 'pad_right', insertText: 'pad_right(${1:str}, ${2:length})', signature: 'pad_right(str<string>, length<int>, [char<string>])', documentation: 'Left-justifies string in a field of given length. char is optional (default: space).' },
+    { label: 'reverse', insertText: 'reverse(${1:str})', signature: 'reverse(str<string>)', documentation: 'Reverses the string.' },
+  ],
+  regex: [
+    { label: 'test', insertText: 'test(${1:str}, ${2:pattern})', signature: 'test(str<string>, pattern<string>)', documentation: 'Returns true if the pattern matches anywhere in str.' },
+    { label: 'match', insertText: 'match(${1:str}, ${2:pattern})', signature: 'match(str<string>, pattern<string>)', documentation: 'Returns the first match as a string, or null.' },
+    { label: 'find_all', insertText: 'find_all(${1:str}, ${2:pattern})', signature: 'find_all(str<string>, pattern<string>)', documentation: 'Returns all non-overlapping matches as list<string>.' },
+    { label: 'replace', insertText: 'replace(${1:str}, ${2:pattern}, ${3:replacement})', signature: 'replace(str<string>, pattern<string>, replacement<string>)', documentation: 'Replaces all pattern matches with replacement.' },
+    { label: 'split', insertText: 'split(${1:str}, ${2:pattern})', signature: 'split(str<string>, pattern<string>)', documentation: 'Splits str by the pattern, returns list<string>.' },
+  ],
 };
 
 const KEYWORD_SNIPPETS = [
   { label: 'var', snippet: 'var<${1:int}> ${2:name} = ${3:value}', detail: 'Omi variable snippet', documentation: 'Creates a typed variable declaration.' },
+  { label: 'const', snippet: 'const<${1:int}> ${2:NAME} = ${3:value}', detail: 'Omi constant snippet', documentation: 'Creates a typed constant declaration. Cannot be reassigned.' },
   { label: 'var[]', snippet: 'var[${1:int}] ${2:name} = [${3}]', detail: 'Omi typed array snippet', documentation: 'Creates a typed array (restricts element types).' },
   { label: 'var[]()', snippet: 'var[${1:int}](${2:5}) ${3:name} = [${4}]', detail: 'Omi sized typed array snippet', documentation: 'Creates a typed array with a maximum element count.' },
   { label: 'type', snippet: 'type ${1:Name} = ${2:int | string}', detail: 'Omi type alias snippet', documentation: 'Creates a type alias.' },
@@ -319,10 +369,10 @@ const USE_FLAG_COMPLETIONS = USE_FLAGS.map((flag) => {
 function getAliasMap(document) {
   const text = document.getText();
   const map = new Map();
-  const regex = /@import\s+["'](omi\/([a-z]+))["']\s+as\s+([A-Za-z_][A-Za-z0-9_]*)/g;
+  const regex = /@import\s+["']omi:([a-z]+)["']\s+as\s+([A-Za-z_][A-Za-z0-9_]*)/g;
   let match;
   while ((match = regex.exec(text)) !== null) {
-    map.set(match[3], match[2]);
+    map.set(match[2], match[1]);
   }
   return map;
 }
