@@ -1,3 +1,5 @@
 test.omi
 package-lock.json
 *.vsix
+node_modules/
+out/

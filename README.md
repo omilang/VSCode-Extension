@@ -2,7 +2,7 @@
 
 # Omi VS Code Extension
 
-Syntax highlighting, file styling, code tips, and signature hints for [Omi Language](https://github.com/OmiLang/Omi).
+Syntax highlighting, file styling, code tips, and signature hints for [Omi Language](https://github.com/OmiLang/Omi)
 
 ## Build from source
 
@@ -10,3 +10,6 @@ Syntax highlighting, file styling, code tips, and signature hints for [Omi Langu
 npm install
 npm run build:vsix
 ```
+
+`npm run compile` compiles TypeScript sources from `src/` into `out/`.
+`npm run build:vsix` also runs compile and then packages the extension into a `.vsix` file.
