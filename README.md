@@ -11,5 +11,6 @@ npm install
 npm run build:vsix
 ```
 
-`npm run compile` compiles TypeScript sources from `src/` into `out/`.
-`npm run build:vsix` also runs compile and then packages the extension into a `.vsix` file.
+`npm run compile` compiles TypeScript sources from `src/` into `out/`
+
+`npm run build:vsix` also runs compile and then packages the extension into a `.vsix` file
