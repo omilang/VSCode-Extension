@@ -355,8 +355,6 @@ const GENERAL_COMPLETIONS = [
   new vscode.CompletionItem('return', vscode.CompletionItemKind.Keyword),
   new vscode.CompletionItem('continue', vscode.CompletionItemKind.Keyword),
   new vscode.CompletionItem('break', vscode.CompletionItemKind.Keyword),
-  new vscode.CompletionItem('enum', vscode.CompletionItemKind.Keyword),
-  new vscode.CompletionItem('trait', vscode.CompletionItemKind.Keyword),
 ];
 
 const DIRECTIVE_COMPLETIONS = DIRECTIVE_SNIPPETS.map((entry) =>
