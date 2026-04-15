@@ -1,4 +1,4 @@
-const vscode = require('vscode');
+import * as vscode from 'vscode';
 
 const MODULE_IMPORTS = [
   { id: 'system', path: 'omi:system', alias: 'sys', description: 'OS interaction, environment variables, and process control.' },
@@ -199,8 +199,8 @@ const MODULE_MEMBERS = {
     { label: 'exec', insertText: 'exec(${1:command})', signature: 'exec(command<string>)', documentation: 'Runs a shell command and returns its output.' },
     { label: 'env', insertText: 'env(${1:name})', signature: 'env(name<string>)', documentation: 'Gets an environment variable value.' },
     { label: 'set_env', insertText: 'set_env(${1:name}, ${2:value})', signature: 'set_env(name<string>, value<string>)', documentation: 'Sets an environment variable.' },
-    { label: 'platform', insertText: 'platform()', signature: 'platform()', documentation: 'Returns the OS name.' },
-    { label: 'username', insertText: 'username()', signature: 'username()', documentation: 'Returns the current username.' },
+    { label: 'platform', insertText: 'platform', signature: 'platform<string>', documentation: 'Constant with the OS name.', kind: vscode.CompletionItemKind.Constant },
+    { label: 'username', insertText: 'username', signature: 'username<string>', documentation: 'Constant with the current username.', kind: vscode.CompletionItemKind.Constant },
     { label: 'cwd', insertText: 'cwd()', signature: 'cwd()', documentation: 'Returns the current working directory.' },
     { label: 'exit', insertText: 'exit(${1:0})', signature: 'exit([code<number>])', documentation: 'Exits the script. `code` is optional and defaults to `0`.' },
   ],
@@ -309,6 +309,8 @@ const KEYWORD_SNIPPETS = [
   { label: 'var[]', snippet: 'var[${1:int}] ${2:name} = [${3}]', detail: 'Omi typed array snippet', documentation: 'Creates a typed array (restricts element types).' },
   { label: 'var[]()', snippet: 'var[${1:int}](${2:5}) ${3:name} = [${4}]', detail: 'Omi sized typed array snippet', documentation: 'Creates a typed array with a maximum element count.' },
   { label: 'type', snippet: 'type ${1:Name} = ${2:int | string}', detail: 'Omi type alias snippet', documentation: 'Creates a type alias.' },
+  { label: 'enum', snippet: 'enum ${1:Name} = {\n  ${2:Variant},\n  ${3:Another(${4:T})}\n}', detail: 'Omi enum snippet', documentation: 'Creates a tagged union (ADT) with unit or payload variants.' },
+  { label: 'trait', snippet: 'trait ${1:Name} = {\n  func<${2:void}> ${3:method}()\n}', detail: 'Omi trait snippet', documentation: 'Creates a structural interface for types.' },
   { label: 'if', snippet: 'if ${1:condition}:\n  $0\nend', detail: 'Omi keyword snippet', documentation: 'Creates an `if` block.' },
   { label: 'elif', snippet: 'elif ${1:condition}:\n  $0', detail: 'Omi keyword snippet', documentation: 'Creates an `elif` block.' },
   { label: 'else', snippet: 'else:\n  $0', detail: 'Omi keyword snippet', documentation: 'Creates an `else` block.' },
@@ -353,6 +355,8 @@ const GENERAL_COMPLETIONS = [
   new vscode.CompletionItem('return', vscode.CompletionItemKind.Keyword),
   new vscode.CompletionItem('continue', vscode.CompletionItemKind.Keyword),
   new vscode.CompletionItem('break', vscode.CompletionItemKind.Keyword),
+  new vscode.CompletionItem('enum', vscode.CompletionItemKind.Keyword),
+  new vscode.CompletionItem('trait', vscode.CompletionItemKind.Keyword),
 ];
 
 const DIRECTIVE_COMPLETIONS = DIRECTIVE_SNIPPETS.map((entry) =>
@@ -553,7 +557,7 @@ function provideSignatureHelp(document, position) {
   return signatureHelp;
 }
 
-function activate(context) {
+export function activate(context: vscode.ExtensionContext) {
   const completionProvider = vscode.languages.registerCompletionItemProvider(
     { language: 'omi' },
     {
@@ -575,9 +579,4 @@ function activate(context) {
   context.subscriptions.push(completionProvider, signatureProvider);
 }
 
-function deactivate() {}
-
-module.exports = {
-  activate,
-  deactivate,
-};
+export function deactivate() {}

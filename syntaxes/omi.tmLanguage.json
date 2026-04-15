@@ -153,7 +153,7 @@
         },
         {
           "name": "keyword.declaration.omi",
-          "match": "\\b(var|const|func|type)\\b"
+          "match": "\\b(var|const|func|type|enum|trait)\\b"
         },
         {
           "name": "keyword.operator.logical.omi",
