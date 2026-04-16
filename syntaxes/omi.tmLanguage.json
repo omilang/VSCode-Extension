@@ -141,7 +141,7 @@
         {
           "comment": "Built-in type names used outside angle brackets (e.g. in type aliases, annotations)",
           "name": "storage.type.omi",
-          "match": "\\b(int|float|number|string|bool|array|dict|func|call|void|null|every)\\b"
+          "match": "\\b(int|float|number|string|bool|array|dict|func|call|future|void|null|every)\\b"
         }
       ]
     },
@@ -149,11 +149,11 @@
       "patterns": [
         {
           "name": "keyword.control.omi",
-          "match": "\\b(if|elif|else|for|to|step|while|end|return|continue|break)\\b"
+          "match": "\\b(if|elif|else|for|to|step|while|try|catch|match|case|end|return|continue|break)\\b"
         },
         {
           "name": "keyword.declaration.omi",
-          "match": "\\b(var|const|func|type|enum|trait)\\b"
+          "match": "\\b(var|const|async|func|type|enum|trait)\\b"
         },
         {
           "name": "keyword.operator.logical.omi",
