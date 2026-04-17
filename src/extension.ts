@@ -11,9 +11,10 @@ const MODULE_IMPORTS = [
   { id: 'txt', path: 'omi:txt', alias: 'txt', description: 'Text file read/write operations.' },
   { id: 'string', path: 'omi:string', alias: 'str', description: 'String manipulation utilities.' },
   { id: 'regex', path: 'omi:regex', alias: 'rx', description: 'Regular expression matching and replacement.' },
+  { id: 'log', path: 'omi:log', alias: 'log', description: 'Structured logging utilities and file logging.' },
 ];
 
-const USE_FLAGS = ['notypes', 'eval', 'debug', 'noecho', 'module'];
+const USE_FLAGS = ['notypes', 'eval', 'debug', 'noecho', 'noasync', 'module'];
 
 const GLOBAL_ITEMS = [
   {
@@ -55,6 +56,14 @@ const GLOBAL_ITEMS = [
     documentation: 'Reads user input as a string.',
     signature: 'input()',
     parameters: [],
+  },
+  {
+    label: 'cancel',
+    insertText: 'cancel(${1:target})',
+    detail: 'Built-in function',
+    documentation: 'Cancels a future or an async group.',
+    signature: 'cancel(target<future|every>)',
+    parameters: ['target<future|every>'],
   },
   {
     label: 'len',
@@ -192,6 +201,38 @@ const GLOBAL_ITEMS = [
     signature: 'typeof(value<every>)',
     parameters: ['value<every>'],
   },
+  {
+    label: 'to_string',
+    insertText: 'to_string(${1:value})',
+    detail: 'Built-in function',
+    documentation: 'Converts a value to string.',
+    signature: 'to_string(value<every>)',
+    parameters: ['value<every>'],
+  },
+  {
+    label: 'to_int',
+    insertText: 'to_int(${1:value})',
+    detail: 'Built-in function',
+    documentation: 'Converts a value to int.',
+    signature: 'to_int(value<every>)',
+    parameters: ['value<every>'],
+  },
+  {
+    label: 'to_float',
+    insertText: 'to_float(${1:value})',
+    detail: 'Built-in function',
+    documentation: 'Converts a value to float.',
+    signature: 'to_float(value<every>)',
+    parameters: ['value<every>'],
+  },
+  {
+    label: 'to_bool',
+    insertText: 'to_bool(${1:value})',
+    detail: 'Built-in function',
+    documentation: 'Converts a value to bool.',
+    signature: 'to_bool(value<every>)',
+    parameters: ['value<every>'],
+  },
 ];
 
 const MODULE_MEMBERS = {
@@ -301,6 +342,19 @@ const MODULE_MEMBERS = {
     { label: 'replace', insertText: 'replace(${1:str}, ${2:pattern}, ${3:replacement})', signature: 'replace(str<string>, pattern<string>, replacement<string>)', documentation: 'Replaces all pattern matches with replacement.' },
     { label: 'split', insertText: 'split(${1:str}, ${2:pattern})', signature: 'split(str<string>, pattern<string>)', documentation: 'Splits str by the pattern, returns list<string>.' },
   ],
+  log: [
+    { label: 'debug', insertText: 'debug(${1:message})', signature: 'debug([message<string>])', documentation: 'Writes a DEBUG log message.' },
+    { label: 'info', insertText: 'info(${1:message})', signature: 'info([message<string>])', documentation: 'Writes an INFO log message.' },
+    { label: 'warning', insertText: 'warning(${1:message})', signature: 'warning([message<string>])', documentation: 'Writes a WARNING log message.' },
+    { label: 'error', insertText: 'error(${1:message})', signature: 'error([message<string>])', documentation: 'Writes an ERROR log message.' },
+    { label: 'critical', insertText: 'critical(${1:message})', signature: 'critical([message<string>])', documentation: 'Writes a CRITICAL log message.' },
+    { label: 'set_level', insertText: 'set_level(${1:"INFO"})', signature: 'set_level(level<string>)', documentation: 'Sets log level: DEBUG, INFO, WARNING, ERROR, CRITICAL.' },
+    { label: 'set_file', insertText: 'set_file(${1:path}, ${2:"append"})', signature: 'set_file(path<string>, [mode<string>])', documentation: 'Enables file logging with mode append/write.' },
+    { label: 'rotate', insertText: 'rotate(max_size=${1:"10MB"}, backup_count=${2:3})', signature: 'rotate([max_size<string>], [backup_count<number>])', documentation: 'Enables rotating file logs.' },
+    { label: 'with_context', insertText: 'with_context(${1:{"request_id": "req-1"}})', signature: 'with_context(data<dict>)', documentation: 'Adds shared context fields to logs.' },
+    { label: 'json_mode', insertText: 'json_mode()', signature: 'json_mode()', documentation: 'Enables JSON log output.' },
+    { label: 'trace', insertText: 'trace()', signature: 'trace()', documentation: 'Logs and returns current source location.' },
+  ],
 };
 
 const KEYWORD_SNIPPETS = [
@@ -326,9 +380,9 @@ const KEYWORD_SNIPPETS = [
 ];
 
 const DIRECTIVE_SNIPPETS = [
-  { label: 'import', snippet: 'import "${1:path}" as ${2:alias}', detail: 'Omi directive snippet', documentation: 'Imports a module. Fill in the full path and alias manually.' },
-  { label: 'use', snippet: 'use ${1:notypes}', detail: 'Omi directive snippet', documentation: 'Enables a language/runtime flag.' },
-  { label: 'set', snippet: 'set ${1:NAME} as ${2:value}', detail: 'Omi directive snippet', documentation: 'Creates an alias or constant.' },
+  { label: '@import', snippet: '@import "${1:path}" as ${2:alias}', detail: 'Omi directive snippet', documentation: 'Imports a module. Fill in the full path and alias manually.' },
+  { label: '@use', snippet: '@use ${1|notypes,eval,debug,noecho,noasync,module|}', detail: 'Omi directive snippet', documentation: 'Enables a language/runtime flag.' },
+  { label: '@set', snippet: '@set ${1:NAME} as ${2:value}', detail: 'Omi directive snippet', documentation: 'Creates an alias or constant.' },
 ];
 
 function createSnippetCompletion(label, snippet, detail, documentation) {

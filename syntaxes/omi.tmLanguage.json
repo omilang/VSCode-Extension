@@ -94,11 +94,12 @@
     "function-definition": {
       "patterns": [
         {
-          "comment": "func<type> name  — with optional return type",
-          "match": "\\b(func)(?:<[^>]*>)?\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "comment": "func<type> name or async func<type> name",
+          "match": "\\b(?:((async)\\s+))?(func)(?:<[^>]*>)?\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
           "captures": {
-            "1": { "name": "keyword.declaration.function.omi" },
-            "2": { "name": "entity.name.function.omi" }
+            "2": { "name": "keyword.control.omi" },
+            "3": { "name": "keyword.declaration.function.omi" },
+            "4": { "name": "entity.name.function.omi" }
           }
         }
       ]
@@ -149,7 +150,11 @@
       "patterns": [
         {
           "name": "keyword.control.omi",
+<<<<<<< Updated upstream
           "match": "\\b(if|elif|else|for|to|step|while|try|catch|match|case|end|return|continue|break)\\b"
+=======
+          "match": "\\b(if|elif|else|try|catch|final|match|case|for|to|step|while|async|end|return|continue|break)\\b"
+>>>>>>> Stashed changes
         },
         {
           "name": "keyword.declaration.omi",
