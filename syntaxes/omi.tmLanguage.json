@@ -150,11 +150,9 @@
       "patterns": [
         {
           "name": "keyword.control.omi",
-<<<<<<< Updated upstream
           "match": "\\b(if|elif|else|for|to|step|while|try|catch|match|case|end|return|continue|break)\\b"
-=======
           "match": "\\b(if|elif|else|try|catch|final|match|case|for|to|step|while|async|end|return|continue|break)\\b"
->>>>>>> Stashed changes
+          "match": "\\b(if|elif|else|try|catch|final|match|case|for|to|step|while|async|end|return|continue|break)\\b"
         },
         {
           "name": "keyword.declaration.omi",

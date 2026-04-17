@@ -377,6 +377,10 @@ const KEYWORD_SNIPPETS = [
   { label: 'try/catch', snippet: 'try:\n  ${1:// code}\ncatch ${2:err}:\n  ${3:println(err.msg)}\nend', detail: 'Omi try/catch snippet', documentation: 'Creates a runtime error handling block.' },
   { label: 'match', snippet: 'match ${1:value}:\n  case ${2:_}:\n    $0\nend', detail: 'Omi match snippet', documentation: 'Creates a pattern matching block.' },
   { label: 'case', snippet: 'case ${1:pattern}:\n  $0', detail: 'Omi case snippet', documentation: 'Creates a case branch for match.' },
+  { label: 'async func', snippet: 'async func<${1:return}> ${2:name}(${3:arg}):\n  $0\nend', detail: 'Omi function snippet', documentation: 'Creates an async function.' },
+  { label: 'async group', snippet: 'async ${1:workers}(timeout: ${2:0.25}):\n  $0\nend', detail: 'Omi async group snippet', documentation: 'Creates an async group with optional timeout parameter.' },
+  { label: 'try/catch/final', snippet: 'try:\n  ${1:// code}\ncatch ${2:err}:\n  ${3:// handle}\nfinal:\n  $0\nend', detail: 'Omi error handling snippet', documentation: 'Creates a try/catch/final block.' },
+  { label: 'match', snippet: 'match ${1:value}:\n  case ${2:_}:\n    $0\nend', detail: 'Omi match snippet', documentation: 'Creates a match/case block.' },
 ];
 
 const DIRECTIVE_SNIPPETS = [
