@@ -371,6 +371,12 @@ const KEYWORD_SNIPPETS = [
   { label: 'for', snippet: 'for ${1:i} = ${2:0} to ${3:10} step ${4:1}:\n  $0\nend', detail: 'Omi keyword snippet', documentation: 'Creates a `for` loop.' },
   { label: 'while', snippet: 'while ${1:condition}:\n  $0\nend', detail: 'Omi keyword snippet', documentation: 'Creates a `while` loop.' },
   { label: 'func', snippet: 'func<${1:return}> ${2:name}(${3:arg}):\n  $0\nend', detail: 'Omi function snippet', documentation: 'Creates a block function.' },
+  { label: 'async func', snippet: 'async func<${1:return}> ${2:name}(${3:arg}):\n  $0\nend', detail: 'Omi async function snippet', documentation: 'Creates an async function that returns future<T> on call.' },
+  { label: 'async call', snippet: 'var<future<${1:type}>> ${2:fut} = async ${3:fn}(${4:args})', detail: 'Omi async call snippet', documentation: 'Schedules a call asynchronously and stores future result.' },
+  { label: 'async await', snippet: 'var<${1:type}> ${2:value} = async ${3:futureVar}', detail: 'Omi await-form snippet', documentation: 'Awaits a future inside async func using async <futureExpr>.' },
+  { label: 'try/catch', snippet: 'try:\n  ${1:// code}\ncatch ${2:err}:\n  ${3:println(err.msg)}\nend', detail: 'Omi try/catch snippet', documentation: 'Creates a runtime error handling block.' },
+  { label: 'match', snippet: 'match ${1:value}:\n  case ${2:_}:\n    $0\nend', detail: 'Omi match snippet', documentation: 'Creates a pattern matching block.' },
+  { label: 'case', snippet: 'case ${1:pattern}:\n  $0', detail: 'Omi case snippet', documentation: 'Creates a case branch for match.' },
   { label: 'async func', snippet: 'async func<${1:return}> ${2:name}(${3:arg}):\n  $0\nend', detail: 'Omi function snippet', documentation: 'Creates an async function.' },
   { label: 'async group', snippet: 'async ${1:workers}(timeout: ${2:0.25}):\n  $0\nend', detail: 'Omi async group snippet', documentation: 'Creates an async group with optional timeout parameter.' },
   { label: 'try/catch/final', snippet: 'try:\n  ${1:// code}\ncatch ${2:err}:\n  ${3:// handle}\nfinal:\n  $0\nend', detail: 'Omi error handling snippet', documentation: 'Creates a try/catch/final block.' },
@@ -413,6 +419,7 @@ const GENERAL_COMPLETIONS = [
   new vscode.CompletionItem('return', vscode.CompletionItemKind.Keyword),
   new vscode.CompletionItem('continue', vscode.CompletionItemKind.Keyword),
   new vscode.CompletionItem('break', vscode.CompletionItemKind.Keyword),
+  new vscode.CompletionItem('async', vscode.CompletionItemKind.Keyword),
 ];
 
 const DIRECTIVE_COMPLETIONS = DIRECTIVE_SNIPPETS.map((entry) =>
