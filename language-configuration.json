@@ -21,17 +21,11 @@
   ],
   "folding": {
     "markers": {
-      "start": "^\\s*(async\\s+func|func|if|for|while|try|match|case|catch)\\b",
-      "start": "^\\s*(func|if|for|while|try|catch|final|match|case|async\\s+[A-Za-z_][A-Za-z0-9_]*\\s*(?:\\([^)]*\\))?\\s*:)\\b",
       "start": "^\\s*(func|if|for|while|try|catch|final|match|case|async\\s+[A-Za-z_][A-Za-z0-9_]*\\s*(?:\\([^)]*\\))?\\s*:)\\b",
       "end": "^\\s*end\\b"
     }
   },
   "indentationRules": {
-    "increaseIndentPattern": "^\\s*(async\\s+func|func|if|elif|else|for|while|try|match|case|catch)\\b.*$",
-    "decreaseIndentPattern": "^\\s*(end|elif|else|case|catch)\\b"
-    "increaseIndentPattern": "^\\s*(func|if|elif|else|try|catch|final|match|case|for|while)\\b.*$|^\\s*async\\s+[A-Za-z_][A-Za-z0-9_]*\\s*(?:\\([^)]*\\))?\\s*:\\s*$",
-    "decreaseIndentPattern": "^\\s*(end|elif|else|catch|final|case)\\b"
     "increaseIndentPattern": "^\\s*(func|if|elif|else|try|catch|final|match|case|for|while)\\b.*$|^\\s*async\\s+[A-Za-z_][A-Za-z0-9_]*\\s*(?:\\([^)]*\\))?\\s*:\\s*$",
     "decreaseIndentPattern": "^\\s*(end|elif|else|catch|final|case)\\b"
   },

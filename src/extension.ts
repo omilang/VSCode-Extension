@@ -357,30 +357,55 @@ const MODULE_MEMBERS = {
   ],
 };
 
+const KEYWORDS = [
+  'var',
+  'const',
+  'and',
+  'or',
+  'is',
+  'isnt',
+  'if',
+  'elif',
+  'else',
+  'try',
+  'catch',
+  'final',
+  'match',
+  'case',
+  'for',
+  'to',
+  'step',
+  'while',
+  'async',
+  'func',
+  'end',
+  'return',
+  'continue',
+  'break',
+  'import',
+  'as',
+  'use',
+  'set',
+  'type',
+  'enum',
+  'trait',
+];
+
 const KEYWORD_SNIPPETS = [
-  { label: 'var', snippet: 'var<${1:int}> ${2:name} = ${3:value}', detail: 'Omi variable snippet', documentation: 'Creates a typed variable declaration.' },
-  { label: 'const', snippet: 'const<${1:int}> ${2:NAME} = ${3:value}', detail: 'Omi constant snippet', documentation: 'Creates a typed constant declaration. Cannot be reassigned.' },
-  { label: 'var[]', snippet: 'var[${1:int}] ${2:name} = [${3}]', detail: 'Omi typed array snippet', documentation: 'Creates a typed array (restricts element types).' },
-  { label: 'var[]()', snippet: 'var[${1:int}](${2:5}) ${3:name} = [${4}]', detail: 'Omi sized typed array snippet', documentation: 'Creates a typed array with a maximum element count.' },
-  { label: 'type', snippet: 'type ${1:Name} = ${2:int | string}', detail: 'Omi type alias snippet', documentation: 'Creates a type alias.' },
-  { label: 'enum', snippet: 'enum ${1:Name} = {\n  ${2:Variant},\n  ${3:Another(${4:T})}\n}', detail: 'Omi enum snippet', documentation: 'Creates a tagged union (ADT) with unit or payload variants.' },
-  { label: 'trait', snippet: 'trait ${1:Name} = {\n  func<${2:void}> ${3:method}()\n}', detail: 'Omi trait snippet', documentation: 'Creates a structural interface for types.' },
-  { label: 'if', snippet: 'if ${1:condition}:\n  $0\nend', detail: 'Omi keyword snippet', documentation: 'Creates an `if` block.' },
-  { label: 'elif', snippet: 'elif ${1:condition}:\n  $0', detail: 'Omi keyword snippet', documentation: 'Creates an `elif` block.' },
-  { label: 'else', snippet: 'else:\n  $0', detail: 'Omi keyword snippet', documentation: 'Creates an `else` block.' },
-  { label: 'for', snippet: 'for ${1:i} = ${2:0} to ${3:10} step ${4:1}:\n  $0\nend', detail: 'Omi keyword snippet', documentation: 'Creates a `for` loop.' },
-  { label: 'while', snippet: 'while ${1:condition}:\n  $0\nend', detail: 'Omi keyword snippet', documentation: 'Creates a `while` loop.' },
-  { label: 'func', snippet: 'func<${1:return}> ${2:name}(${3:arg}):\n  $0\nend', detail: 'Omi function snippet', documentation: 'Creates a block function.' },
-  { label: 'async func', snippet: 'async func<${1:return}> ${2:name}(${3:arg}):\n  $0\nend', detail: 'Omi async function snippet', documentation: 'Creates an async function that returns future<T> on call.' },
-  { label: 'async call', snippet: 'var<future<${1:type}>> ${2:fut} = async ${3:fn}(${4:args})', detail: 'Omi async call snippet', documentation: 'Schedules a call asynchronously and stores future result.' },
-  { label: 'async await', snippet: 'var<${1:type}> ${2:value} = async ${3:futureVar}', detail: 'Omi await-form snippet', documentation: 'Awaits a future inside async func using async <futureExpr>.' },
-  { label: 'try/catch', snippet: 'try:\n  ${1:// code}\ncatch ${2:err}:\n  ${3:println(err.msg)}\nend', detail: 'Omi try/catch snippet', documentation: 'Creates a runtime error handling block.' },
-  { label: 'match', snippet: 'match ${1:value}:\n  case ${2:_}:\n    $0\nend', detail: 'Omi match snippet', documentation: 'Creates a pattern matching block.' },
-  { label: 'case', snippet: 'case ${1:pattern}:\n  $0', detail: 'Omi case snippet', documentation: 'Creates a case branch for match.' },
-  { label: 'async func', snippet: 'async func<${1:return}> ${2:name}(${3:arg}):\n  $0\nend', detail: 'Omi function snippet', documentation: 'Creates an async function.' },
-  { label: 'async group', snippet: 'async ${1:workers}(timeout: ${2:0.25}):\n  $0\nend', detail: 'Omi async group snippet', documentation: 'Creates an async group with optional timeout parameter.' },
-  { label: 'try/catch/final', snippet: 'try:\n  ${1:// code}\ncatch ${2:err}:\n  ${3:// handle}\nfinal:\n  $0\nend', detail: 'Omi error handling snippet', documentation: 'Creates a try/catch/final block.' },
-  { label: 'match', snippet: 'match ${1:value}:\n  case ${2:_}:\n    $0\nend', detail: 'Omi match snippet', documentation: 'Creates a match/case block.' },
+  { label: 'var (snippet)', snippet: 'var<${1:int}> ${2:name} = ${3:value}', detail: 'Omi variable snippet', documentation: 'Creates a typed variable declaration.' },
+  { label: 'const (snippet)', snippet: 'const<${1:int}> ${2:NAME} = ${3:value}', detail: 'Omi constant snippet', documentation: 'Creates a typed constant declaration.' },
+  { label: 'type (snippet)', snippet: 'type ${1:Name} = ${2:int | string}', detail: 'Omi type alias snippet', documentation: 'Creates a type alias.' },
+  { label: 'enum (snippet)', snippet: 'enum ${1:Name} = {\n  ${2:Variant},\n  ${3:Another(${4:T})}\n}', detail: 'Omi enum snippet', documentation: 'Creates an enum/tagged union.' },
+  { label: 'trait (snippet)', snippet: 'trait ${1:Name} = {\n  func<${2:void}> ${3:method}()\n}', detail: 'Omi trait snippet', documentation: 'Creates a trait definition.' },
+  { label: 'if (snippet)', snippet: 'if ${1:condition}:\n  $0\nend', detail: 'Omi if snippet', documentation: 'Creates an if block.' },
+  { label: 'for (snippet)', snippet: 'for ${1:i} = ${2:0} to ${3:10} step ${4:1}:\n  $0\nend', detail: 'Omi for snippet', documentation: 'Creates a for loop.' },
+  { label: 'while (snippet)', snippet: 'while ${1:condition}:\n  $0\nend', detail: 'Omi while snippet', documentation: 'Creates a while loop.' },
+  { label: 'func (snippet)', snippet: 'func<${1:return}> ${2:name}(${3:arg}):\n  $0\nend', detail: 'Omi function snippet', documentation: 'Creates a function.' },
+  { label: 'async func (snippet)', snippet: 'async func<${1:return}> ${2:name}(${3:arg}):\n  $0\nend', detail: 'Omi async function snippet', documentation: 'Creates an async function.' },
+  { label: 'try/catch (snippet)', snippet: 'try:\n  ${1:// code}\ncatch ${2:err}:\n  ${3:// handle}\nend', detail: 'Omi try/catch snippet', documentation: 'Creates a try/catch block.' },
+  { label: 'try/catch/final (snippet)', snippet: 'try:\n  ${1:// code}\ncatch ${2:err}:\n  ${3:// handle}\nfinal:\n  $0\nend', detail: 'Omi try/catch/final snippet', documentation: 'Creates a try/catch/final block.' },
+  { label: 'match (snippet)', snippet: 'match ${1:value}:\n  case ${2:_}:\n    $0\nend', detail: 'Omi match snippet', documentation: 'Creates a match/case block.' },
+  { label: 'case (snippet)', snippet: 'case ${1:pattern}:\n  $0', detail: 'Omi case snippet', documentation: 'Creates a case branch.' },
 ];
 
 const DIRECTIVE_SNIPPETS = [
@@ -406,20 +431,20 @@ function createFunctionCompletion(entry, prefix = '') {
   return item;
 }
 
+function createKeywordCompletion(keyword) {
+  const item = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword);
+  item.insertText = keyword;
+  item.detail = 'Omi keyword';
+  return item;
+}
+
 const GENERAL_COMPLETIONS = [
+  ...KEYWORDS.map((keyword) => createKeywordCompletion(keyword)),
   ...KEYWORD_SNIPPETS.map((entry) => createSnippetCompletion(entry.label, entry.snippet, entry.detail, entry.documentation)),
   ...GLOBAL_ITEMS.map((entry) => createFunctionCompletion(entry)),
   new vscode.CompletionItem('true', vscode.CompletionItemKind.Keyword),
   new vscode.CompletionItem('false', vscode.CompletionItemKind.Keyword),
   new vscode.CompletionItem('null', vscode.CompletionItemKind.Keyword),
-  new vscode.CompletionItem('and', vscode.CompletionItemKind.Keyword),
-  new vscode.CompletionItem('or', vscode.CompletionItemKind.Keyword),
-  new vscode.CompletionItem('is', vscode.CompletionItemKind.Keyword),
-  new vscode.CompletionItem('isnt', vscode.CompletionItemKind.Keyword),
-  new vscode.CompletionItem('return', vscode.CompletionItemKind.Keyword),
-  new vscode.CompletionItem('continue', vscode.CompletionItemKind.Keyword),
-  new vscode.CompletionItem('break', vscode.CompletionItemKind.Keyword),
-  new vscode.CompletionItem('async', vscode.CompletionItemKind.Keyword),
 ];
 
 const DIRECTIVE_COMPLETIONS = DIRECTIVE_SNIPPETS.map((entry) =>
