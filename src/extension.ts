@@ -402,6 +402,7 @@ const KEYWORD_SNIPPETS = [
   { label: 'while (snippet)', snippet: 'while ${1:condition}:\n  $0\nend', detail: 'Omi while snippet', documentation: 'Creates a while loop.' },
   { label: 'func (snippet)', snippet: 'func<${1:return}> ${2:name}(${3:arg}):\n  $0\nend', detail: 'Omi function snippet', documentation: 'Creates a function.' },
   { label: 'async func (snippet)', snippet: 'async func<${1:return}> ${2:name}(${3:arg}):\n  $0\nend', detail: 'Omi async function snippet', documentation: 'Creates an async function.' },
+  { label: 'async group (snippet)', snippet: 'async ${1:groupName}(timeout: ${2:0.25}):\n  $0\nend', detail: 'Omi async group snippet', documentation: 'Creates an async group with an optional timeout.' },
   { label: 'try/catch (snippet)', snippet: 'try:\n  ${1:// code}\ncatch ${2:err}:\n  ${3:// handle}\nend', detail: 'Omi try/catch snippet', documentation: 'Creates a try/catch block.' },
   { label: 'try/catch/final (snippet)', snippet: 'try:\n  ${1:// code}\ncatch ${2:err}:\n  ${3:// handle}\nfinal:\n  $0\nend', detail: 'Omi try/catch/final snippet', documentation: 'Creates a try/catch/final block.' },
   { label: 'match (snippet)', snippet: 'match ${1:value}:\n  case ${2:_}:\n    $0\nend', detail: 'Omi match snippet', documentation: 'Creates a match/case block.' },
