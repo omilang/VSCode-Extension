@@ -1,8 +1,8 @@
 {
   "name": "omilang",
   "displayName": "Omi",
-  "description": "Syntax highlighting, file icons, autocomplete, and signature hints for the Omi programming language (.omi)",
-  "version": "1.4.0",
+  "description": "Syntax highlighting, file icons, autocomplete, and signature hints for the Omi programming language (.omi, .test.omi) and config files (.omilint)",
+  "version": "1.5.0",
   "publisher": "Qualsu",
   "icon": "icons/icon.png",
   "main": "./out/extension.js",
@@ -21,7 +21,9 @@
     "vscode": "^1.60.0"
   },
   "activationEvents": [
-    "onLanguage:omi"
+    "onLanguage:omi",
+    "onLanguage:omi-test",
+    "onLanguage:omi-config"
   ],
   "categories": [
     "Programming Languages",
@@ -38,6 +40,27 @@
           "light": "./icons/icon.png",
           "dark": "./icons/icon.png"
         }
+      },
+      {
+        "id": "omi-test",
+        "aliases": ["Omi Test", "OmiLang Test", "omilang-test"],
+        "extensions": [".test.omi"],
+        "configuration": "./language-configuration.test.json",
+        "icon": {
+          "light": "./icons/test-icon.png",
+          "dark": "./icons/test-icon.png"
+        }
+      },
+      {
+        "id": "omi-config",
+        "aliases": ["Omi Config", "OmiLint Config"],
+        "extensions": [".omilint"],
+        "filenames": [".omilint"],
+        "configuration": "./language-configuration.omilint.json",
+        "icon": {
+          "light": "./icons/config-icon.png",
+          "dark": "./icons/config-icon.png"
+        }
       }
     ],
     "grammars": [
@@ -45,6 +68,16 @@
         "language": "omi",
         "scopeName": "source.omi",
         "path": "./syntaxes/omi.tmLanguage.json"
+      },
+      {
+        "language": "omi-test",
+        "scopeName": "source.omi.test",
+        "path": "./syntaxes/omi-test.tmLanguage.json"
+      },
+      {
+        "language": "omi-config",
+        "scopeName": "source.omilint",
+        "path": "./syntaxes/omilint.tmLanguage.json"
       }
     ],
     "iconThemes": [
@@ -52,6 +85,12 @@
         "id": "omi-icons",
         "label": "Omi Icons",
         "path": "./icons/omi-icon-theme.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "omi-config",
+        "path": "./snippets/omilint.json"
       }
     ]
   }

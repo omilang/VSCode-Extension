@@ -1,0 +1,147 @@
+{
+  "general": {
+    "prefix": "general",
+    "body": ["[general]"],
+    "description": "General section header"
+  },
+  "rules": {
+    "prefix": "rules",
+    "body": ["[rules]"],
+    "description": "Rules section header"
+  },
+  "auto_fix": {
+    "prefix": "auto-fix",
+    "body": ["[auto-fix]"],
+    "description": "Auto-fix section header"
+  },
+  "level": {
+    "prefix": "level",
+    "body": ["level"],
+    "description": "General level key"
+  },
+  "max_line_length": {
+    "prefix": "max_line_length",
+    "body": ["max_line_length"],
+    "description": "General max line length key"
+  },
+  "exclude": {
+    "prefix": "exclude",
+    "body": ["exclude"],
+    "description": "General exclude key"
+  },
+  "enabled": {
+    "prefix": "enabled",
+    "body": ["enabled"],
+    "description": "Auto-fix enabled key"
+  },
+  "auto_fix_rules": {
+    "prefix": "auto-fix-rules",
+    "body": ["rules"],
+    "description": "Auto-fix rules key"
+  },
+  "rule_undefined_var": {
+    "prefix": "undefined-var",
+    "body": ["undefined-var"],
+    "description": "Rule keyword"
+  },
+  "rule_type_mismatch": {
+    "prefix": "type-mismatch",
+    "body": ["type-mismatch"],
+    "description": "Rule keyword"
+  },
+  "rule_const_reassign": {
+    "prefix": "const-reassign",
+    "body": ["const-reassign"],
+    "description": "Rule keyword"
+  },
+  "rule_missing_return": {
+    "prefix": "missing-return",
+    "body": ["missing-return"],
+    "description": "Rule keyword"
+  },
+  "rule_invalid_import": {
+    "prefix": "invalid-import",
+    "body": ["invalid-import"],
+    "description": "Rule keyword"
+  },
+  "rule_duplicate_param": {
+    "prefix": "duplicate-param",
+    "body": ["duplicate-param"],
+    "description": "Rule keyword"
+  },
+  "rule_unreachable_code": {
+    "prefix": "unreachable-code",
+    "body": ["unreachable-code"],
+    "description": "Rule keyword"
+  },
+  "rule_unused_var": {
+    "prefix": "unused-var",
+    "body": ["unused-var"],
+    "description": "Rule keyword"
+  },
+  "rule_unused_import": {
+    "prefix": "unused-import",
+    "body": ["unused-import"],
+    "description": "Rule keyword"
+  },
+  "rule_prefer_const": {
+    "prefix": "prefer-const",
+    "body": ["prefer-const"],
+    "description": "Rule keyword"
+  },
+  "rule_no_shadow": {
+    "prefix": "no-shadow",
+    "body": ["no-shadow"],
+    "description": "Rule keyword"
+  },
+  "rule_naming_convention": {
+    "prefix": "naming-convention",
+    "body": ["naming-convention"],
+    "description": "Rule keyword"
+  },
+  "rule_max_line_length": {
+    "prefix": "max-line-length",
+    "body": ["max-line-length"],
+    "description": "Rule keyword"
+  },
+  "rule_trailing_whitespace": {
+    "prefix": "trailing-whitespace",
+    "body": ["trailing-whitespace"],
+    "description": "Rule keyword"
+  },
+  "rule_spacing_operators": {
+    "prefix": "spacing-operators",
+    "body": ["spacing-operators"],
+    "description": "Rule keyword"
+  },
+  "rule_empty_lines": {
+    "prefix": "empty-lines",
+    "body": ["empty-lines"],
+    "description": "Rule keyword"
+  },
+  "rule_eval_usage": {
+    "prefix": "eval-usage",
+    "body": ["eval-usage"],
+    "description": "Rule keyword"
+  },
+  "rule_unsafe_import": {
+    "prefix": "unsafe-import",
+    "body": ["unsafe-import"],
+    "description": "Rule keyword"
+  },
+  "rule_hardcoded_secret": {
+    "prefix": "hardcoded-secret",
+    "body": ["hardcoded-secret"],
+    "description": "Rule keyword"
+  },
+  "rule_division_by_zero_risk": {
+    "prefix": "division-by-zero-risk",
+    "body": ["division-by-zero-risk"],
+    "description": "Rule keyword"
+  },
+  "rule_prefer_nullable": {
+    "prefix": "prefer-nullable",
+    "body": ["prefer-nullable"],
+    "description": "Rule keyword"
+  }
+}
