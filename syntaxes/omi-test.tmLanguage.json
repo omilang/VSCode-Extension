@@ -1,11 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/tmlanguage.json",
-  "name": "Omi",
-  "scopeName": "source.omi",
+  "name": "Omi Test",
+  "scopeName": "source.omi.test",
   "patterns": [
     { "include": "#comments" },
     { "include": "#directives" },
     { "include": "#keywords" },
+    { "include": "#test-keywords" },
     { "include": "#type-annotation" },
     { "include": "#type-keywords" },
     { "include": "#function-definition" },
@@ -150,7 +151,7 @@
       "patterns": [
         {
           "name": "keyword.control.omi",
-          "match": "\\b(if|elif|else|try|catch|final|match|case|for|to|step|while|async|end|return|continue|break)\\b"
+          "match": "\\b(if|elif|else|try|catch|final|match|case|for|to|step|while|async|end|return|continue|break|suite|test|skip|before|after|before_each|after_each|expect)\\b"
         },
         {
           "name": "keyword.declaration.omi",
@@ -163,6 +164,14 @@
         {
           "name": "keyword.other.omi",
           "match": "\\b(as|use|set)\\b"
+        }
+      ]
+    },
+    "test-keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.test.omi",
+          "match": "\\b(suite|test|skip|before|after|before_each|after_each|expect)\\b"
         }
       ]
     },

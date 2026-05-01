@@ -11,10 +11,13 @@ const MODULE_IMPORTS = [
   { id: 'txt', path: 'omi:txt', alias: 'txt', description: 'Text file read/write operations.' },
   { id: 'string', path: 'omi:string', alias: 'str', description: 'String manipulation utilities.' },
   { id: 'regex', path: 'omi:regex', alias: 'rx', description: 'Regular expression matching and replacement.' },
+  { id: 'python', path: 'omi:python', alias: 'py', description: 'Python interop bridge: import modules, call members, and eval code.' },
   { id: 'log', path: 'omi:log', alias: 'log', description: 'Structured logging utilities and file logging.' },
 ];
 
-const USE_FLAGS = ['notypes', 'eval', 'debug', 'noecho', 'noasync', 'module'];
+const USE_FLAGS_COMMON = ['notypes', 'eval', 'debug', 'noecho', 'noasync', 'module', 'json', 'fix', 'failfast', 'level', 'rules', 'config'];
+const USE_FLAGS_TEST = [...USE_FLAGS_COMMON, 'save'];
+const USE_LEVEL_VALUES = ['error', 'warning', 'style', 'security'];
 
 const GLOBAL_ITEMS = [
   {
@@ -342,6 +345,11 @@ const MODULE_MEMBERS = {
     { label: 'replace', insertText: 'replace(${1:str}, ${2:pattern}, ${3:replacement})', signature: 'replace(str<string>, pattern<string>, replacement<string>)', documentation: 'Replaces all pattern matches with replacement.' },
     { label: 'split', insertText: 'split(${1:str}, ${2:pattern})', signature: 'split(str<string>, pattern<string>)', documentation: 'Splits str by the pattern, returns list<string>.' },
   ],
+  python: [
+    { label: 'import', insertText: 'import(${1:"math"})', signature: 'import(name<string>)', documentation: 'Imports a Python module and returns a py.lib wrapper.' },
+    { label: 'call', insertText: 'call(${1:lib}, ${2:"member"}, ${3:arg})', signature: 'call(lib<py.lib>, member<string>, ...args<every>)', documentation: 'Calls a Python module/object member with converted arguments.' },
+    { label: 'eval', insertText: 'eval(${1:"1 + 2"})', signature: 'eval(code<string>)', documentation: 'Executes/evaluates Python code string and returns converted result.' },
+  ],
   log: [
     { label: 'debug', insertText: 'debug(${1:message})', signature: 'debug([message<string>])', documentation: 'Writes a DEBUG log message.' },
     { label: 'info', insertText: 'info(${1:message})', signature: 'info([message<string>])', documentation: 'Writes an INFO log message.' },
@@ -411,8 +419,49 @@ const KEYWORD_SNIPPETS = [
 
 const DIRECTIVE_SNIPPETS = [
   { label: '@import', snippet: '@import "${1:path}" as ${2:alias}', detail: 'Omi directive snippet', documentation: 'Imports a module. Fill in the full path and alias manually.' },
-  { label: '@use', snippet: '@use ${1|notypes,eval,debug,noecho,noasync,module|}', detail: 'Omi directive snippet', documentation: 'Enables a language/runtime flag.' },
+  { label: '@use', snippet: '@use ${1|notypes,eval,debug,noecho,noasync,module,json,fix,failfast,level,rules,config|}', detail: 'Omi directive snippet', documentation: 'Enables a language/runtime flag.' },
   { label: '@set', snippet: '@set ${1:NAME} as ${2:value}', detail: 'Omi directive snippet', documentation: 'Creates an alias or constant.' },
+];
+
+const TEST_SNIPPETS = [
+  { label: 'suite', snippet: 'suite "${1:name}":\n  $0\nend', detail: 'Omi test snippet', documentation: 'Creates a test suite.' },
+  { label: 'test', snippet: 'test "${1:description}":\n  $0\nend', detail: 'Omi test snippet', documentation: 'Creates a test case.' },
+  { label: 'async test', snippet: 'async test "${1:description}":\n  $0\nend', detail: 'Omi test snippet', documentation: 'Creates an async test case.' },
+  { label: 'skip test', snippet: 'skip test "${1:description}":\n  $0\nend', detail: 'Omi test snippet', documentation: 'Creates a skipped test case.' },
+  { label: 'before', snippet: 'before:\n  $0\nend', detail: 'Omi test snippet', documentation: 'Creates a suite before hook.' },
+  { label: 'after', snippet: 'after:\n  $0\nend', detail: 'Omi test snippet', documentation: 'Creates a suite after hook.' },
+  { label: 'before_each', snippet: 'before_each:\n  $0\nend', detail: 'Omi test snippet', documentation: 'Creates a before_each hook.' },
+  { label: 'after_each', snippet: 'after_each:\n  $0\nend', detail: 'Omi test snippet', documentation: 'Creates an after_each hook.' },
+  { label: 'expect', snippet: 'expect ${1:condition}', detail: 'Omi test snippet', documentation: 'Asserts that an expression is truthy.' },
+  { label: 'expect with message', snippet: 'expect ${1:condition} ~ "${2:message}"', detail: 'Omi test snippet', documentation: 'Asserts with a custom failure message.' },
+];
+
+const USE_AS_KEYWORDS = [
+  { label: 'as', detail: 'Omi @use keyword' },
+];
+
+const USE_CONFIG_VALUE_HINTS = [
+  { label: 'as "./.omilint"', detail: 'Omi @use config value' },
+];
+
+const USE_CONFIG_VALUE_ONLY_HINTS = [
+  { label: '"./.omilint"', detail: 'Omi @use config value' },
+];
+
+const USE_SAVE_VALUE_HINTS = [
+  { label: 'as "report.json"', detail: 'Omi @use save value (test only)' },
+];
+
+const USE_SAVE_VALUE_ONLY_HINTS = [
+  { label: '"report.json"', detail: 'Omi @use save value (test only)' },
+];
+
+const USE_RULES_VALUE_HINTS = [
+  { label: 'as "undefined-var,unused-var"', detail: 'Omi @use rules value' },
+];
+
+const USE_RULES_VALUE_ONLY_HINTS = [
+  { label: '"undefined-var,unused-var"', detail: 'Omi @use rules value' },
 ];
 
 function createSnippetCompletion(label, snippet, detail, documentation) {
@@ -439,6 +488,33 @@ function createKeywordCompletion(keyword) {
   return item;
 }
 
+function createAtReplacementRange(document, position) {
+  const linePrefix = document.lineAt(position).text.slice(0, position.character);
+  const atIndex = linePrefix.lastIndexOf('@');
+  if (atIndex < 0) {
+    return undefined;
+  }
+
+  return new vscode.Range(
+    new vscode.Position(position.line, atIndex),
+    position
+  );
+}
+
+function applyAtReplacementRange(items, document, position) {
+  const range = createAtReplacementRange(document, position);
+  if (!range) {
+    return items;
+  }
+
+  return items.map((item) => {
+    const copy = new vscode.CompletionItem(item.label, item.kind);
+    Object.assign(copy, item);
+    copy.range = range;
+    return copy;
+  });
+}
+
 const GENERAL_COMPLETIONS = [
   ...KEYWORDS.map((keyword) => createKeywordCompletion(keyword)),
   ...KEYWORD_SNIPPETS.map((entry) => createSnippetCompletion(entry.label, entry.snippet, entry.detail, entry.documentation)),
@@ -452,12 +528,165 @@ const DIRECTIVE_COMPLETIONS = DIRECTIVE_SNIPPETS.map((entry) =>
   createSnippetCompletion(entry.label, entry.snippet, entry.detail, entry.documentation)
 );
 
-const USE_FLAG_COMPLETIONS = USE_FLAGS.map((flag) => {
-  const item = new vscode.CompletionItem(flag, vscode.CompletionItemKind.EnumMember);
-  item.insertText = flag;
-  item.detail = 'Omi @use flag';
+// OmiLint config completions
+const OMILINT_CONFIG_KEYS = [
+  { label: 'level', detail: 'Lint severity level', documentation: 'Valid values: error, warning, style, security' },
+  { label: 'max_line_length', detail: 'Maximum line length', documentation: 'Integer value, e.g., 100' },
+  { label: 'exclude', detail: 'Exclude patterns', documentation: 'Comma-separated glob patterns' },
+];
+
+const OMILINT_GENERAL_VALUES = [
+  { label: 'error', detail: '[general] level value' },
+  { label: 'warning', detail: '[general] level value' },
+  { label: 'style', detail: '[general] level value' },
+  { label: 'security', detail: '[general] level value' },
+];
+
+const OMILINT_RULE_VALUES = [
+  { label: 'error', detail: '[rules] severity' },
+  { label: 'warning', detail: '[rules] severity' },
+  { label: 'style', detail: '[rules] severity' },
+  { label: 'security', detail: '[rules] severity' },
+  { label: 'true', detail: '[rules] enable rule' },
+  { label: 'false', detail: '[rules] disable rule' },
+];
+
+const OMILINT_RULE_KEYS = [
+  { label: 'undefined-var', detail: 'Rule name' },
+  { label: 'type-mismatch', detail: 'Rule name' },
+  { label: 'const-reassign', detail: 'Rule name' },
+  { label: 'missing-return', detail: 'Rule name' },
+  { label: 'invalid-import', detail: 'Rule name' },
+  { label: 'duplicate-param', detail: 'Rule name' },
+  { label: 'unreachable-code', detail: 'Rule name' },
+  { label: 'unused-var', detail: 'Rule name' },
+  { label: 'unused-import', detail: 'Rule name' },
+  { label: 'prefer-const', detail: 'Rule name' },
+  { label: 'no-shadow', detail: 'Rule name' },
+  { label: 'naming-convention', detail: 'Rule name' },
+  { label: 'max-line-length', detail: 'Rule name' },
+  { label: 'trailing-whitespace', detail: 'Rule name' },
+  { label: 'spacing-operators', detail: 'Rule name' },
+  { label: 'empty-lines', detail: 'Rule name' },
+  { label: 'eval-usage', detail: 'Rule name' },
+  { label: 'unsafe-import', detail: 'Rule name' },
+  { label: 'hardcoded-secret', detail: 'Rule name' },
+  { label: 'division-by-zero-risk', detail: 'Rule name' },
+  { label: 'prefer-nullable', detail: 'Rule name' },
+];
+
+const OMILINT_AUTOFIX_KEYS = [
+  { label: 'enabled', detail: 'Enable/disable auto-fix', documentation: 'Valid values: true, false' },
+  { label: 'rules', detail: 'Rules to auto-fix', documentation: 'Comma-separated rule names' },
+];
+
+const OMILINT_BOOLEAN_VALUES = [
+  { label: 'true', detail: '[auto-fix] enabled value' },
+  { label: 'false', detail: '[auto-fix] enabled value' },
+];
+
+function createConfigCompletion(label, detail, documentation = '') {
+  const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Variable);
+  item.insertText = label;
+  item.detail = detail;
+  if (documentation) {
+    item.documentation = new vscode.MarkdownString(documentation);
+  }
+  return item;
+}
+
+function createConfigValueCompletion(label, detail) {
+  const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.EnumMember);
+  item.insertText = label;
+  item.detail = detail;
+  return item;
+}
+
+function createEnumCompletion(label, detail) {
+  const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.EnumMember);
+  item.insertText = label;
+  item.detail = detail;
+  return item;
+}
+
+function provideOmiLintCompletions(document, position) {
+  const line = document.lineAt(position).text;
+  const linePrefix = line.slice(0, position.character);
+
+  // Determine current section
+  let currentSection = '';
+  for (let i = position.line; i >= 0; i--) {
+    const text = document.lineAt(i).text;
+    const sectionMatch = text.match(/^\s*\[([a-zA-Z\-]+)\]/);
+    if (sectionMatch) {
+      currentSection = sectionMatch[1];
+      break;
+    }
+  }
+
+  // Check if we're on the value side of = 
+  const equalsIndex = linePrefix.indexOf('=');
+  const isValuePosition = equalsIndex >= 0 && linePrefix.slice(equalsIndex).match(/=\s*[^=]*$/);
+
+  if (isValuePosition) {
+    // Provide values based on section and key
+    if (currentSection === 'general') {
+      const keyMatch = linePrefix.match(/^\s*([a-zA-Z_]+)\s*=/);
+      const key = keyMatch ? keyMatch[1] : '';
+      if (key === 'level') {
+        return OMILINT_GENERAL_VALUES.map((entry) => createConfigValueCompletion(entry.label, entry.detail));
+      }
+    }
+    if (currentSection === 'rules') {
+      return OMILINT_RULE_VALUES.map((entry) => createConfigValueCompletion(entry.label, entry.detail));
+    }
+    if (currentSection === 'auto-fix') {
+      const keyMatch = linePrefix.match(/^\s*([a-zA-Z_]+)\s*=/);
+      const key = keyMatch ? keyMatch[1] : '';
+      if (key === 'enabled') {
+        return OMILINT_BOOLEAN_VALUES.map((entry) => createConfigValueCompletion(entry.label, entry.detail));
+      }
+    }
+    return [];
+  }
+
+  // Provide keys based on section
+  if (currentSection === 'general') {
+    return OMILINT_CONFIG_KEYS.map((entry) => createConfigCompletion(entry.label, entry.detail, entry.documentation));
+  }
+  if (currentSection === 'rules') {
+    return OMILINT_RULE_KEYS.map((entry) => createConfigCompletion(entry.label, entry.detail));
+  }
+  if (currentSection === 'auto-fix') {
+    return OMILINT_AUTOFIX_KEYS.map((entry) => createConfigCompletion(entry.label, entry.detail, entry.documentation));
+  }
+
+  return [];
+}
+
+const TEST_KEYWORDS_SIMPLE = ['suite', 'test', 'expect', 'before', 'after', 'before_each', 'after_each', 'skip', 'async'];
+
+const TEST_COMPLETIONS = [
+  ...TEST_SNIPPETS.map((entry) => createSnippetCompletion(entry.label, entry.snippet, entry.detail, entry.documentation)),
+  ...TEST_KEYWORDS_SIMPLE.map((keyword) => createKeywordCompletion(keyword)),
+];
+
+const USE_LEVEL_COMPLETIONS = USE_LEVEL_VALUES.map((value) => {
+  const item = new vscode.CompletionItem(value, vscode.CompletionItemKind.EnumMember);
+  item.insertText = value;
+  item.detail = 'Omi @use level value';
   return item;
 });
+
+function getUseFlagCompletions(isTestLanguage) {
+  const flags = isTestLanguage ? USE_FLAGS_TEST : USE_FLAGS_COMMON;
+  return flags.map((flag) => {
+    const item = new vscode.CompletionItem(flag, vscode.CompletionItemKind.EnumMember);
+    item.insertText = flag;
+    item.detail = 'Omi @use flag';
+    return item;
+  });
+}
 
 function getAliasMap(document) {
   const text = document.getText();
@@ -586,15 +815,50 @@ function getSignatureEntry(callee, document) {
   return GLOBAL_ITEMS.find((entry) => entry.label === callee) || null;
 }
 
-function provideCompletionItems(document, position) {
+function provideCompletionItems(document, position, token, context) {
   const linePrefix = document.lineAt(position).text.slice(0, position.character);
+  const isTestLanguage = document.languageId === 'omi-test';
 
   if (/(^|\s)@[A-Za-z_]*$/u.test(linePrefix)) {
-    return DIRECTIVE_COMPLETIONS;
+    return applyAtReplacementRange(DIRECTIVE_COMPLETIONS, document, position);
+  }
+
+  if (/@use\s+(level|rules|config|save)\s+$/u.test(linePrefix)) {
+    const asItems = USE_AS_KEYWORDS.map((entry) => createEnumCompletion(entry.label, entry.detail));
+
+    if (/@use\s+config\s+$/u.test(linePrefix)) {
+      return [...asItems, ...USE_CONFIG_VALUE_HINTS.map((entry) => createEnumCompletion(entry.label, entry.detail))];
+    }
+
+    if (/@use\s+rules\s+$/u.test(linePrefix)) {
+      return [...asItems, ...USE_RULES_VALUE_HINTS.map((entry) => createEnumCompletion(entry.label, entry.detail))];
+    }
+
+    if (/@use\s+save\s+$/u.test(linePrefix) && isTestLanguage) {
+      return [...asItems, ...USE_SAVE_VALUE_HINTS.map((entry) => createEnumCompletion(entry.label, entry.detail))];
+    }
+
+    return asItems;
+  }
+
+  if (/@use\s+level\s+as\s+[A-Za-z_]*$/u.test(linePrefix)) {
+    return USE_LEVEL_COMPLETIONS;
+  }
+
+  if (/@use\s+rules\s+as\s*$/u.test(linePrefix)) {
+    return USE_RULES_VALUE_ONLY_HINTS.map((entry) => createEnumCompletion(entry.label, entry.detail));
+  }
+
+  if (/@use\s+config\s+as\s*$/u.test(linePrefix)) {
+    return USE_CONFIG_VALUE_ONLY_HINTS.map((entry) => createEnumCompletion(entry.label, entry.detail));
+  }
+
+  if (isTestLanguage && /@use\s+save\s+as\s*$/u.test(linePrefix)) {
+    return USE_SAVE_VALUE_ONLY_HINTS.map((entry) => createEnumCompletion(entry.label, entry.detail));
   }
 
   if (/@use\s+[A-Za-z_]*$/u.test(linePrefix)) {
-    return USE_FLAG_COMPLETIONS;
+    return getUseFlagCompletions(isTestLanguage);
   }
 
   if (/@import\s*$/u.test(linePrefix) || /@import\s+["'][^"']*$/u.test(linePrefix)) {
@@ -609,6 +873,10 @@ function provideCompletionItems(document, position) {
     if (moduleName) {
       return getModuleMemberCompletions(moduleName);
     }
+  }
+
+  if (isTestLanguage) {
+    return [...GENERAL_COMPLETIONS, ...TEST_COMPLETIONS];
   }
 
   return GENERAL_COMPLETIONS;
@@ -648,7 +916,7 @@ function provideSignatureHelp(document, position) {
 
 export function activate(context: vscode.ExtensionContext) {
   const completionProvider = vscode.languages.registerCompletionItemProvider(
-    { language: 'omi' },
+    { language: 'omi', scheme: 'file' },
     {
       provideCompletionItems,
     },
@@ -656,8 +924,24 @@ export function activate(context: vscode.ExtensionContext) {
     '@'
   );
 
+  const testCompletionProvider = vscode.languages.registerCompletionItemProvider(
+    { language: 'omi-test', scheme: 'file' },
+    {
+      provideCompletionItems,
+    },
+    '.',
+    '@'
+  );
+
+  const configCompletionProvider = vscode.languages.registerCompletionItemProvider(
+    { language: 'omi-config', scheme: 'file' },
+    {
+      provideCompletionItems: provideOmiLintCompletions,
+    }
+  );
+
   const signatureProvider = vscode.languages.registerSignatureHelpProvider(
-    { language: 'omi' },
+    { language: 'omi', scheme: 'file' },
     {
       provideSignatureHelp,
     },
@@ -665,7 +949,16 @@ export function activate(context: vscode.ExtensionContext) {
     ','
   );
 
-  context.subscriptions.push(completionProvider, signatureProvider);
+  const testSignatureProvider = vscode.languages.registerSignatureHelpProvider(
+    { language: 'omi-test', scheme: 'file' },
+    {
+      provideSignatureHelp,
+    },
+    '(',
+    ','
+  );
+
+  context.subscriptions.push(completionProvider, testCompletionProvider, configCompletionProvider, signatureProvider, testSignatureProvider);
 }
 
 export function deactivate() {}

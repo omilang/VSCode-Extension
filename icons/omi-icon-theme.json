@@ -2,9 +2,25 @@
   "iconDefinitions": {
     "omi-file": {
       "iconPath": "./icon.png"
+    },
+    "omilint-config-file": {
+      "iconPath": "./config-icon.png"
+    },
+    "omilang-config-file": {
+      "fontCharacter": "",
+      "fontId": "codicon"
     }
+  },
+  "fileNames": {
+    ".omilang": "omilang-config-file",
+    ".omilint": "omilint-config-file"
   },
   "fileExtensions": {
     "omi": "omi-file",
+    "omilang": "omilang-config-file",
+    "omilint": "omilint-config-file"
+  },
+  "languageIds": {
+    "omi-config": "omilint-config-file"
   }
 }

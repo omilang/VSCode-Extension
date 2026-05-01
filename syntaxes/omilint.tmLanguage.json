@@ -1,0 +1,58 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "OmiLint Config",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#sections"
+    },
+    {
+      "include": "#keyvalue"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.hash.omilint",
+          "match": "#.*$"
+        }
+      ]
+    },
+    "sections": {
+      "patterns": [
+        {
+          "name": "meta.section.omilint",
+          "match": "^\\s*(\\[[a-zA-Z0-9\\-]+\\])\\s*$",
+          "captures": {
+            "1": {
+              "name": "entity.name.section.omilint"
+            }
+          }
+        }
+      ]
+    },
+    "keyvalue": {
+      "patterns": [
+        {
+          "name": "meta.keyvalue.omilint",
+          "match": "^\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\s*(=)\\s*(.*)$",
+          "captures": {
+            "1": {
+              "name": "variable.other.property.omilint"
+            },
+            "2": {
+              "name": "punctuation.separator.omilint"
+            },
+            "3": {
+              "name": "string.unquoted.omilint"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "scopeName": "source.omilint"
+}
